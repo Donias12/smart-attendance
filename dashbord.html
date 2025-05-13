@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Smart Attendance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="user-info">
+                        <h3 id="studentName">Loading...</h3>
+                        <p>Student</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="#">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Attendance</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-book"></i>
+                            <span>Modules</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Statistics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <header class="main-header">
+                <h2><i class="fas fa-home"></i> Dashboard</h2>
+                <div class="header-actions">
+                    <div class="notification">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-wrapper">
+                <!-- Welcome Card -->
+                <div class="welcome-card">
+                    <div class="welcome-content">
+                        <h3>Welcome back, <span id="studentNameWelcome"></span>!</h3>
+                        <p>Mark your attendance for today's classes using the session code provided by your lecturer.</p>
+                        <button class="btn-primary" onclick="document.getElementById('markAttendanceModal').style.display='block'">
+                            <i class="fas fa-qrcode"></i> Mark Attendance
+                        </button>
+                    </div>
+                    <div class="welcome-image">
+                        <img src="assets/student-illustration.svg" alt="Student Illustration">
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #4e73df;">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Today's Attendance</h4>
+                            <p id="todayAttendance">0/0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #1cc88a;">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Overall Attendance</h4>
+                            <p id="overallAttendance">0%</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #36b9cc;">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Active Modules</h4>
+                            <p id="activeModules">0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modules Section -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-book"></i> Your Modules</h3>
+                        <button class="btn-refresh" onclick="loadStudentModules()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="modules-grid" id="modulesList">
+                        <!-- Modules will be loaded here -->
+                        <div class="module-card placeholder">
+                            <div class="module-icon">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                            <h4>Loading modules...</h4>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-history"></i> Recent Attendance</h3>
+                    </div>
+                    <div class="recent-activity">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-check-circle success"></i>
+                            </div>
+                            <div class="activity-details">
+                                <p>Marked attendance for <strong>Web Development</strong></p>
+                                <small>Today, 10:30 AM</small>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-check-circle success"></i>
+                            </div>
+                            <div class="activity-details">
+                                <p>Marked attendance for <strong>Database Systems</strong></p>
+                                <small>Yesterday, 2:15 PM</small>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-times-circle error"></i>
+                            </div>
+                            <div class="activity-details">
+                                <p>Missed <strong>Software Engineering</strong> class</p>
+                                <small>Monday, 9:00 AM</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mark Attendance Modal -->
+    <div id="markAttendanceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('markAttendanceModal').style.display='none'">&times;</span>
+            <h3><i class="fas fa-qrcode"></i> Mark Attendance</h3>
+            <form id="attendanceForm">
+                <div class="form-group">
+                    <label for="sessionCode">
+                        <i class="fas fa-key"></i> Session Code
+                    </label>
+                    <input type="text" id="sessionCode" placeholder="Enter session code from lecturer" required>
+                </div>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-check-circle"></i> Submit Attendance
+                </button>
+            </form>
+            <div class="qr-instructions">
+                <p><strong>How to get the session code:</strong></p>
+                <ol>
+                    <li>Attend your class in person</li>
+                    <li>Ask your lecturer for the current session code</li>
+                    <li>Enter the code above to mark your attendance</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/student.js"></script>
+    <script>
+        // Load user data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                document.getElementById('studentName').textContent = user.fullName;
+                document.getElementById('studentNameWelcome').textContent = user.fullName;
+            }
+            
+            // Load modules
+            loadStudentModules();
+            
+            // Close modal when clicking outside
+            window.onclick = function(event) {
+                const modal = document.getElementById('markAttendanceModal');
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

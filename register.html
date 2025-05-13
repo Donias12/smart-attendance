@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance - Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="background-animation"></div>
+    <div class="container">
+        <div class="login-card">
+            <div class="logo">
+                <i class="fas fa-user-plus"></i>
+                <h1>Create Account</h1>
+            </div>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registrationNumber">
+                        <i class="fas fa-id-card"></i> Registration Number
+                    </label>
+                    <input type="text" id="registrationNumber" placeholder="Enter your registration number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fullName">
+                        <i class="fas fa-user"></i> Full Name
+                    </label>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" id="password" placeholder="Create a password" required>
+                    <span class="toggle-password" onclick="togglePasswordVisibility('password')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                    <div class="password-strength">
+                        <span class="strength-bar"></span>
+                        <span class="strength-bar"></span>
+                        <span class="strength-bar"></span>
+                        <span class="strength-text">Password strength</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">
+                        <i class="fas fa-lock"></i> Confirm Password
+                    </label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                    <span class="toggle-password" onclick="togglePasswordVisibility('confirmPassword')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="year">
+                        <i class="fas fa-calendar-alt"></i> Academic Year
+                    </label>
+                    <select id="year" required>
+                        <option value="" disabled selected>Select your year</option>
+                        <option value="1">First Year</option>
+                        <option value="2">Second Year</option>
+                        <option value="3">Third Year</option>
+                        <option value="4">Fourth Year</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="role">
+                        <i class="fas fa-user-tag"></i> Role
+                    </label>
+                    <select id="role" required>
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="student">Student</option>
+                        <option value="lecturer">Lecturer</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+                
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="index.html">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        function togglePasswordVisibility(fieldId) {
+            const password = document.getElementById(fieldId);
+            const icon = document.querySelector(`#${fieldId} + .toggle-password i`);
+            if (password.type === 'password') {
+                password.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                password.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // Password strength indicator
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBars = document.querySelectorAll('.strength-bar');
+            const strengthText = document.querySelector('.strength-text');
+            
+            // Reset all bars
+            strengthBars.forEach(bar => bar.style.backgroundColor = '#ddd');
+            
+            if (password.length === 0) {
+                strengthText.textContent = 'Password strength';
+                return;
+            }
+            
+            // Very weak
+            if (password.length < 4) {
+                strengthBars[0].style.backgroundColor = '#ff4d4d';
+                strengthText.textContent = 'Very weak';
+                return;
+            }
+            
+            // Weak
+            if (password.length < 6) {
+                strengthBars[0].style.backgroundColor = '#ff9c4d';
+                strengthBars[1].style.backgroundColor = '#ff9c4d';
+                strengthText.textContent = 'Weak';
+                return;
+            }
+            
+            // Medium
+            if (password.length < 8) {
+                strengthBars[0].style.backgroundColor = '#ffd24d';
+                strengthBars[1].style.backgroundColor = '#ffd24d';
+                strengthBars[2].style.backgroundColor = '#ffd24d';
+                strengthText.textContent = 'Medium';
+                return;
+            }
+            
+            // Strong
+            strengthBars[0].style.backgroundColor = '#4CAF50';
+            strengthBars[1].style.backgroundColor = '#4CAF50';
+            strengthBars[2].style.backgroundColor = '#4CAF50';
+            strengthText.textContent = 'Strong';
+        });
+    </script>
+</body>
+</html>
